@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -142,7 +144,7 @@ public class DBIO {
         boolean workedFine = true;
         try {
             database.execSQL("update words " +
-                    " set lmScore = lmScore - 0.2" +
+                    " set lmScore = lmScore + 0.2" +
                     " where _id = " + id);
 
         } catch (SQLException e) {
@@ -202,20 +204,33 @@ public class DBIO {
 
         int sTimes = 0;
         try {
-            Cursor rs = database.rawQuery("select shuffle from shuffletimes where _id=1",null);
-            sTimes = rs.getInt(1);
+            Cursor rs = database.rawQuery("select shuffle from shuffletimes",null);
+            rs.moveToFirst();
+            rs.moveToNext();
+            sTimes = rs.getInt(0);
         } catch (Exception e) {
             sTimes = 0;
+            try{
+                database.execSQL("insert into shuffletimes values(0,1)");
+            }
+            catch (Exception e1)
+            {
+                Log.e(DBIO.class.getName(),"Error in inserting again");
+            }
+
+
             Log.e(DBIO.class.getName(), e.getMessage());
         }
         return sTimes;
     }
     public Word[] getWords(int limit) {
 
-        if (getShuffleTimes() < 6 || getShuffleTimes()%3==0) {
+        if (getShuffleTimes()<6 && getShuffleTimes()%3==0) {
+            Log.i("DBIO","Random Shuffle:"+getShuffleTimes());
             incrementShuffleTimes();
             return getRandomWords(limit);
         } else {
+            Log.i("DBIO","Ordered Shuffle:"+getShuffleTimes());
             incrementShuffleTimes();
             return getTopXWords(limit);
         }
@@ -223,10 +238,17 @@ public class DBIO {
     private Word[] getTopXWords(int limit) {
 
         Word w;
+        int olimit = 0;
         ArrayList<Word> warr = new ArrayList<Word>();
         ArrayList<Integer> ids = new ArrayList<Integer>();
+        if(limit>5)
+        {
+            olimit = limit - 5;
+            limit=5;
+        }
+
         try {
-            Cursor rs = database.rawQuery("select  * from words order by score DESC, random() limit " + limit,null);
+            Cursor rs = database.rawQuery("select  * from words order by score ASC limit " + limit+1,null);
             rs.moveToFirst();
             while (rs.moveToNext()) {
                 w = new Word();
@@ -238,10 +260,14 @@ public class DBIO {
                 w.setLmScore(rs.getDouble(6));
                 w.setScore(rs.getDouble(7));
                 w.setId(rs.getInt(0));
+
                 ids.add(rs.getInt(0));
                 warr.add(w);
             }
+            if(olimit+limit>5)
+                warr.addAll(Arrays.asList(getRandomWords(olimit)));
             for (int i = 0; i < limit; i++) {
+                Log.i("IDS", String.valueOf(ids.get(i)));
                 decrementLMById(ids.get(i));
             }
             updateScores();

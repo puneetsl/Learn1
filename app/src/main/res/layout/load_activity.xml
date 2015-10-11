@@ -1,0 +1,67 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="me.puneetsingh.learn1.LoadActivity"
+    android:background="#333333">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@mipmap/ic_launcher"
+        android:layout_above="@+id/textView9"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="42dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Memodiction"
+        android:id="@+id/textView9"
+        android:textColor="#FFFFFF"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="74dp"
+        android:layout_above="@+id/textView10"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Loading..."
+        android:id="@+id/textView10"
+        android:textColor="#AAAAAA"
+        android:layout_marginBottom="65dp"
+        android:layout_above="@+id/textView11"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="It can take upto a minute or two to load this app for the first time"
+        android:id="@+id/textView11"
+        android:layout_marginBottom="97dp"
+        android:textColor="#666666"
+        android:textSize="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView2"
+        android:src="@mipmap/loading"
+        android:layout_above="@+id/textView11"
+        android:layout_below="@+id/textView10"
+        android:layout_alignRight="@+id/textView11"
+        android:layout_alignEnd="@+id/textView11" />
+
+</RelativeLayout>
